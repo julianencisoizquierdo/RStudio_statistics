@@ -1,0 +1,445 @@
+---
+title: "R Session 2S"
+output: html_notebook
+---
+
+# 1. In-class Demo
+
+### Example 1: Manufactured Bolt
+
+```{r}
+# Please input here...
+
+## SOLUTION 1
+z_stat <- (29.84 - 30) / (0.8/sqrt(100))
+z_stat
+
+# Option 1: critical-value approach
+z_value <- qnorm(0.05/2)
+ind <- z_stat < z_value # indicator for whether to reject H0
+ind <- (abs(z_stat) > abs(z_value)) # indicator with abs value
+
+# Option 2: p-value approach
+p_val <- 2 * pnorm(z_stat)
+ind <- p_val < 0.05
+
+## SOLUTION 2
+install.packages("BSDA")
+library(BSDA)
+zsum.test(mean.x=29.84,
+          sigma.x=0.8,
+          n.x=100,
+          mu=30,
+          alternative="two.sided")
+
+
+
+```
+
+### Example 2: Hotel Cost
+
+```{r}
+# Please input here...
+
+## SOLUTION 1
+t_stat <- (172.5 - 168) / (15.4/sqrt(25))
+
+# Option 1: critical-value approach
+t_value <- qt(0.05/2, df=24)
+ind <- (abs(t_stat) > abs(t_value))
+
+
+# Option 2: p-value approach
+p_value <- (1 - pt(t_stat, df=24))*2
+
+ind <- (p_value < 0.05)
+
+
+## SOLUTION 2
+tsum.test(mean.x=172.5,
+          n.x=25,
+          s.x=15.4,
+          mu=168,
+          alternative="two.sided",
+          conf.level=0.99)
+
+
+```
+
+### Example 3: Mailing
+
+```{r}
+# Please input here...
+
+## SOLUTION 1
+p <- 25/500
+z_stat <- (p - 0.08) / sqrt((0.08*(1-0.08))/500)
+
+# Option 1: critical-value approach
+z_value <- qnorm(0.05/2)
+ind <- abs(z_stat) > abs(z_value)
+
+
+# Option 2: p-value approach
+p_value <- 2*(1-pnorm(abs(z_stat)))
+ind <- (p_value < 0.05)
+
+
+## SOLUTION 2
+prop.test(x=25,
+          n=500,
+          p=0.08,
+          alternative="two.sided",
+          conf.level=0.95,
+          correct=FALSE)
+
+
+
+```
+
+### Example 4: Questionnaire (I)
+
+```{r}
+# Please input here...
+x <- c(69, 75, 76, 80, 81, 82, 86, 89, 91, 92, 97)
+
+t.test(x=x,
+       mu=82,
+       alternative="greater",
+       conf.level=0.95)
+
+```
+
+### Example 5: Dividend Yield (I)
+
+```{r}
+# Please input here...
+tsum.test(mean.x=3.27,
+          s.x=1.3,
+          n.x=21,
+          mean.y=2.53,
+          s.y=1.16,
+          n.y=25,
+          alternative="two.sided",
+          conf.level=0.95,
+          var.equal=TRUE)
+
+
+```
+
+### Example 6: Questionnaire (II)
+
+```{r}
+# Please input here...
+x <- c(69, 75, 76, 80, 81, 82, 86, 89, 91, 92, 97)
+y <- c(59, 62, 66, 70, 70, 75, 75, 77, 78, 79, 81, 84, 84, 86, 94)
+
+mean(y)
+
+t.test(x=x,
+       y=y,
+       alternative="greater",
+       mu=0,
+       conf.level=0.99,
+       var.equal=TRUE)
+
+t.test(x=x,
+       y=y,
+       alternative="greater",
+       mu=0,
+       conf.level=0.99,
+       var.equal=FALSE)
+
+
+```
+
+### Example 7: Training Workshop
+
+```{r}
+# Please input here...
+x <- c(6, 20, 3, 0, 4)
+y <- c(4, 6, 2, 0, 0)
+
+t.test(x=x,
+       y=y,
+       alternative="two.sided",
+       mu=0,
+       conf.level=0.99,
+       paired=TRUE)
+```
+
+### Example 8: Proposition Votes
+
+```{r}
+# Please input here...
+prop.test(x=c(36, 35),
+          n=c(72, 50),
+          alternative="two.sided",
+          conf.level=0.95)
+
+
+```
+
+### Example 9: Assembly Line
+
+```{r}
+# Please input here...
+df1 <- data.frame(x="A", y=c(58, 64, 55, 66, 67))
+df2 <- data.frame(x="B", y=c(58, 69, 71, 64, 68))
+df3 <- data.frame(x="C", y=c(48, 57, 59, 47, 49))
+df <- rbind(df1, df2, df3)
+summary(aov(y ~ x, data=df))
+
+```
+
+### Example 10: Market Share Study
+
+```{r}
+# Please input here...
+x <- c(48, 98, 54)
+s <- c(0.3, 0.5, 0.2)
+chisq.test(x=x, p=s)
+
+```
+
+### Example 11: Beer Drinkers
+
+```{r}
+# Please input here...
+df <- data.frame(Light=c(20,30), Regular=c(40,30), Dark=c(20,10))
+rownames(df) <- c("Male", "Female")
+chisq.test(df)
+```
+
+### Example 12: Grocery Store
+
+```{r}
+# Please input here...
+binom.test(x=7, n=10)
+
+binom.test(x=108, n=115)
+
+binom.test(x=4, n=20)
+
+```
+
+### Example 13: Manufacturing
+
+```{r}
+# Please input here...
+x <- c(10.2, 9.6, 9.2, 10.6, 9.9, 16.2, 10.6, 10.0, 11.2, 10.7, 10.6)
+y <- c(9.5, 9.8, 8.8, 10.1, 10.3, 9.3, 10.5, 10.0, 10.6, 10.2, 6.2)
+
+wilcox.test(x=x,
+            y=y,
+            paired=TRUE,
+            alternative="two.sided",
+            conf.level=0.95)
+
+
+```
+
+### Example 14: Employee Performance
+
+```{r}
+# Please input here...
+x <- c(15, 3, 23, 8)
+y <- c(18, 20, 32, 9, 25)
+
+wilcox.test(x=x,
+            y=y,
+            paired=FALSE,
+            alternative="two.sided",
+            conf.level=0.95)
+
+```
+
+### Example 15: Annual Performance Report
+
+```{r}
+# Please input here...
+df1 <- data.frame(x="A", y=c(25, 70, 60, 85, 95, 90, 80))
+df2 <- data.frame(x="B", y=c(60, 20, 30, 15, 40, 35))
+df3 <- data.frame(x="C", y=c(50, 70, 60, 80, 90, 70, 75))
+
+df <- rbind(df1, df2, df3)
+kruskal.test(y ~ x, data=df)
+
+```
+
+### Example 16: Sales Potential
+
+```{r}
+# Please input here...
+x <- c(2, 4, 7, 1, 6, 3, 10, 9, 8, 5)
+y <- c(1,3,5,6,7,4,10,8,9,2)
+
+cor(x=x, y=y, method="spearman")
+cor.test(x=x, y=y, method="spearman")
+```
+
+
+# 2. Exercise
+
+### Exercise 1: Turtle's Weight
+
+A team of researchers try to investigate whether the mean weight of a particular turtle species is 300 pounds. We collected a simple random sample with the following weights:
+290, 305, 310, 301, 304, 299, 290, 298, 295, 293, 295, 291, 293
+Please perform an appropriate test and draw a conclusion with 0.1 level of significance.
+
+```{r}
+# Please input here...
+x <- c(290, 305, 310, 301, 304, 299, 290, 298, 295, 293, 295, 291, 293)
+
+# SOLUTION 1
+mu <- 300
+xbar <- mean(x)
+alpha <- 0.01
+s <- sd(x)
+n <- length(x)
+
+t_stat <- ((xbar - mu) / (s / sqrt(n)))
+t_stat
+p_value <- pt(t_stat, n-1)*2
+p_value
+
+reject <- p_value > alpha
+reject
+
+
+# SOLUTION 2
+critical_value <- qt(alpha/2, n-1)
+critical_value
+standard_error <- s/sqrt(n)
+standard_error
+
+conf_int <- c(xbar-critical_value*standard_error, xbar+critical_value*standard_error) 
+conf_int
+
+  
+# SOLUTION 3
+tsum.test(mean.x=mean(x),
+          s.x=sd(x),
+          n.x=length(x),
+          mu=300,
+          alternative="two.sided",
+          conf.level=0.99)
+
+
+```
+
+You conclusion: The hypothesis that the population mean of this turtle species is 300 pounds cannot be rejected.
+
+
+### Exercise 2: Jump Height
+
+A study is to check whether or not a specific training program can increase the max vertical jumps. The researchers recruit a simple random sample of 15 college students and measure each of their max vertical jumps. Then, they go through the training program and get their second measures at the end of the program. The following data show the measures (in inches) before and after the training program:
+Before: 25, 22, 22, 24, 20, 18, 19, 19, 20, 22, 25, 24, 23, 22, 21
+After: 27, 21, 23, 23, 25, 20, 24, 18, 22, 23, 28, 24, 25, 24, 20
+Is there a significant improvement of their jumps after the training program?
+Please perform an appropriate test and draw a conclusion with 0.01 level of significance.
+
+```{r}
+# Please input here...
+x <- c(25, 22, 22, 24, 20, 18, 19, 19, 20, 22, 25, 24, 23, 22, 21)
+y <- c(27, 21, 23, 23, 25, 20, 24, 18, 22, 23, 28, 24, 25, 24, 20)
+
+t.test(x=x,
+       y=y,
+       alternative="two.sided",
+       mu=0,
+       conf.level=0.99,
+       paired=TRUE)
+
+
+
+```
+
+You conclusion: I assumed that the distribution was normal, and thus performed a t-test instead of a Wilcoxon-signed rank test. The null hypothesis can´t be rejected at a 99% confidence level. That is, we can´t claim that there has been a significant improvement in their jumps.
+
+
+### Exercise 3: Medicine Effectiveness
+
+A team of researchers would like to determine if the proportion of people who responded positively to the medicine is different between two groups. In the first group, 130 out of 200 people responded positively. In the second group, 50 out of 100 people responded positively to the medicine.
+Please perform an appropriate test and draw a conclusion with 0.05 level of significance.
+
+```{r}
+# Please input here...
+prop.test(x=c(130, 50),
+          n=c(200, 100),
+          alternative="two.sided",
+          conf.level=0.95)
+
+```
+
+You conclusion: the p-value is lower than 5%. Thus, we reject the hypothesis that the proportion of people who responded positively to the medicine is the same between the two groups.
+
+
+### Exercise 4: Body Height
+
+A research institution would like to compare the average height of adults in three different regions (A, B, and C). The researchers then randomly sample of 8 adults from these regions and record their heights as below:
+Region A: 180, 183, 172, 178, 169, 179, 178, 180
+Region B: 185, 181, 180, 179, 164, 173, 180, 178
+Region C: 170, 183, 180, 175, 181, 182, 176, 167
+Please perform an appropriate test and draw a conclusion with 0.05 level of significance.
+
+```{r}
+# Please input here...
+df1 <- data.frame(x="A", y=c(180, 183, 172, 178, 169, 179, 178, 180))
+df2 <- data.frame(x="B", y=c(185, 181, 180, 179, 164, 173, 180, 178))
+df3 <- data.frame(x="C", y=c(170, 183, 180, 175, 181, 182, 176, 167))
+
+df <- rbind(df1, df2, df3)
+summary(aov(y ~ x, data=df))
+
+```
+
+You conclusion: After performing the ANOVA test, we can't reject the Null Hypothesis that all the means are equal. In fact, we obtain a very large p-value, given that the between-treatments estimate of variance is low and that the within-treatments estiimate of variance is large.
+
+
+### Exercise 5: Tire Quality
+
+An operations manager would like to determine whether the quality of work depends on the three daily shifts. She randomly selects 496 tires and inspects them. Each tire can be classified as perfect, satisfactory, or defective. The following table summarizes the inspection results: 
+      Perfect   Satisfactory   Defective
+Shift 1: 106       124            1
+Shift 2: 67        85             1
+Shift 3: 37        72             3
+Please perform an appropriate test and draw a conclusion with 0.05 level of significance.
+
+```{r}
+# Please input here...
+
+df <- data.frame(Perfect=c(106, 67, 37), Satisfactory=c(124, 85, 72), Defective=c(1,1,3))
+rownames(df) <- c("Shift 1:", "Shift 2:", "Shift 3:")
+chisq.test(df)
+
+
+```
+
+You conclusion: The Null Hypothesis is that the tire classification is independent from the shift. Given that the the p-value is 7%, we can't reject this hypothesis at a 5% level of significance.
+
+
+### Exercise 6: Clinical Trial
+
+Consider a Phase II clinical trial designed to investigate the effectiveness of a new drug to reduce symptoms of asthma in children. A total of n=10 participants are randomized to receive either the new drug or a placebo. Participants are asked to record the number of episodes of shortness of breath over a 1 week period following receipt of the assigned treatment. The data are shown below:
+Placebo: 7, 5, 6, 4, 12
+New Drug: 3, 6, 4, 2, 1
+(No assumption of normal distribution for the data.)
+Is there a difference in the number of episodes of shortness of breath over a 1 week period in participants receiving the new drug as compared to those receiving the placebo?
+Please perform an appropriate test and draw a conclusion with 0.05 level of significance.
+
+```{r}
+# Please input here...
+x <- c(7, 5, 6, 4, 12)
+y <- c(3, 6, 4, 2, 1)
+
+wilcox.test(x=x,
+            y=y,
+            paired=FALSE,
+            alternative="two.sided",
+            conf.interval=0.95)
+
+```
+
+You conclusion: given that we can't assume a normal distribution of the data, and given that the samples are not matched, we need to perform the Wilcoxon-signed rank test. With a p-value of 0.058, we can't reject the Null Hypothesis that there is no difference in the number of episodes of shortness of breath between the two groups.
+
