@@ -1,0 +1,188 @@
+---
+title: "R Session 1S"
+output: html_notebook
+---
+
+# 1. Descriptive Statistics
+
+### 1.1 Load and view data
+```{r}
+library(MASS)
+View(quine)
+```
+
+### 1.2 Mean and median:
+Use the variable Days in quine
+```{r}
+# please input here...
+mean(quine$Days)
+median(quine$Days)
+```
+
+### 1.3 Mode:
+Use the variable Eth in quine
+```{r}
+getmode <- function(x){
+    ux <- unique(x)
+    ux[which.max(tabulate(match(x, ux)))]
+  }
+# please input here...
+getmode(quine$Eth)
+```
+
+### 1.4 Geometric mean:
+Use any vector
+```{r}
+install.packages("psych")
+library(psych)
+# please input here...
+geometric.mean(c(0.5, 2))
+```
+
+### 1.5 Range, variance and standard deviation:
+Use the variable Days in quine
+```{r}
+# please input here...
+range(quine$Days)
+var(quine$Days)
+sd(quine$Days)
+```
+
+### 1.6 Coefficient of variation (CV):
+Use the variable Days in quine
+```{r}
+# please input here...
+sd(quine$Days) / mean(quine$Days) * 100
+```
+
+
+### 1.7 Z-score:
+Use the variable Days in quine
+```{r}
+# please input here...
+x <- 15
+(x - mean(quine$Days)) / sd(quine$Days)
+```
+
+### 1.8 Skewness and kurtosis:
+Use the variable Days in quine
+```{r}
+install.packages("moments")
+library(moments)
+# please input here...
+skewness(quine$Days)
+kurtosis(quine$Days)
+```
+
+### 1.9 Quartile:
+Use the variable Days in quine
+```{r}
+# please input here...
+quantile(quine$Days)
+quantile(quine$Days, probs=c(0.1, 0.2, 0.5))
+quantile(quine$Days, probs=seq(0, 1, by=0.1))
+```
+
+### 1.10 Five-number summary:
+Use the variable Days in quine
+```{r}
+# please input here...
+summary(quine$Days)
+summary(quine)
+```
+
+### 1.11 Boxplot:
+Use the variable Days in quine
+```{r}
+# please input here...
+boxplot(quine$Days, horizontal=TRUE)
+boxplot(quine$Days, horizontal=TRUE, range=0)
+```
+
+
+# 2. Normal Distributions
+
+### 2.1 Probability density function
+```{r}
+# please input here...
+x <- seq(-5, 5, by=0.1)
+y <- dnorm(x)
+plot(x, y)
+```
+
+### 2.2 Cumulative distribution function
+```{r}
+# please input here...
+x <- seq(-5, 5, by=0.1)
+y <- pnorm(x)
+plot(x, y)
+```
+
+### 2.3 Quantile function
+```{r}
+# please input here...
+x <- seq(0, 1, by=0.01)
+y <- qnorm(x)
+plot(x, y)
+```
+
+### 2.4 Random number generator
+```{r}
+# please input here...
+x <- rnorm(10000)
+hist(x, breaks=30)
+```
+
+# 3. Confidence Interval
+
+### 3.1 Z distribution for population mean:
+```{r}
+# please input here...
+n <- 11           # sample size
+xbar <- 2.2       # sample mean
+sigma <- 0.35     # population std
+alpha <- 1-0.95   # confidence level
+z_value <- abs(qnorm(alpha/2)) # z value
+conf_intv <- c(xbar - z_value*sigma/sqrt(n),
+xbar+z_value*sigma/sqrt(n))
+conf_intv
+```
+
+### 3.2 T distribution for population mean:
+```{r}
+# please input here...
+n <- 25
+xbar <- 50
+s <- 8
+alpha <- 1-0.95
+t_value <- abs(qt(alpha/2, df=n-1))
+t_value
+conf_intv <- c(xbar - t_value*s/sqrt(n),
+xbar + t_value*s/sqrt(n))
+conf_intv
+```
+
+### 3.3 Z distribution for population proportion:
+```{r}
+# please input here...
+n <- 100
+p <- 25/n
+alpha <- 1-0.95
+z_value <- abs(qnorm(alpha/2))
+z_value
+conf_intv <- c(p - z_value*sqrt(p*(1-p)/n),
+p + z_value*sqrt(p*(1-p)/n))
+conf_intv
+
+```
+
+### 3.4 Confidence interval function:
+```{r}
+# please input here...
+install.packages("Rmisc")
+library(Rmisc)
+
+x <- c(1.44, -0.93, 0.54, 1.28, -0.52)
+conf_intv <- CI(x, ci=0.95)
+conf_intv
+```
